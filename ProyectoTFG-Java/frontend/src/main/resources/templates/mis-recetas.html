@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Mis Recetas - Recetario</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-fire"></i> Recetario
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">🏠 Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/mis-recetas">📝 Mis Recetas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/favoritos">❤️ Favoritos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="cerrarSesion()">👤 Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container my-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="display-4">📝 Mis Recetas</h1>
+                    <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalCrearReceta">
+                        <i class="bi bi-plus-circle"></i> Crear Receta
+                    </button>
+                </div>
+
+                <!-- Mensaje de inicio de sesión requerido -->
+                <div id="mensajeNoAutorizado" class="alert alert-warning d-none" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> <strong>Debes iniciar sesión</strong> para ver tus recetas.
+                    <a href="#" class="alert-link" data-bs-toggle="modal" data-bs-target="#modalAuth">Inicia sesión aquí</a>
+                </div>
+
+                <!-- Indicador de carga -->
+                <div id="cargando" class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="mt-3">Cargando tus recetas...</p>
+                </div>
+
+                <!-- Contenedor de las recetas del usuario -->
+                <div id="contenedorRecetas" class="row g-4 d-none">
+                    <!-- Las recetas se cargarán aquí con JavaScript -->
+                </div>
+
+                <!-- Mensaje cuando no hay recetas -->
+                <div id="sinRecetas" class="alert alert-info d-none text-center" role="alert">
+                    <i class="bi bi-inbox"></i> No tienes recetas creadas aún.
+                    <button class="btn btn-info btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#modalCrearReceta">
+                        Crea tu primera receta
+                    </button>
+                </div>
+
+                <!-- Mensaje de error -->
+                <div id="mensajeError" class="alert alert-danger d-none" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> <strong>Error:</strong> No se pudieron cargar tus recetas.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL CREAR/EDITAR RECETA -->
+    <div class="modal fade" id="modalCrearReceta" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tituloModal">Crear Nueva Receta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formularioReceta">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Título de la Receta *</label>
+                                <input type="text" class="form-control" id="campoTitulo" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Categoría</label>
+                                <select class="form-select" id="campoCategoria">
+                                    <option value="">Selecciona una categoría</option>
+                                    <option value="Plato Principal">Plato Principal</option>
+                                    <option value="Postre">Postre</option>
+                                    <option value="Aperitivo">Aperitivo</option>
+                                    <option value="Bebida">Bebida</option>
+                                    <option value="Desayuno">Desayuno</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea class="form-control" id="campoDescripcion" rows="2"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Tiempo (minutos)</label>
+                                <input type="number" class="form-control" id="campoTiempo" min="1">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Porciones</label>
+                                <input type="number" class="form-control" id="campoPorciones" min="1">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Dificultad</label>
+                                <select class="form-select" id="campoDificultad">
+                                    <option value="">Selecciona</option>
+                                    <option value="Fácil">Fácil</option>
+                                    <option value="Medio">Medio</option>
+                                    <option value="Difícil">Difícil</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">URL de la Imagen</label>
+                            <input type="url" class="form-control" id="campoImagen" placeholder="https://ejemplo.com/imagen.jpg">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ingredientes</label>
+                            <div id="contenedorIngredientes">
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control ingrediente" placeholder="Ingrediente">
+                                    <button type="button" class="btn btn-outline-danger" onclick="eliminarInput(this)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarIngrediente()">
+                                <i class="bi bi-plus-circle"></i> Agregar Ingrediente
+                            </button>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Pasos para Preparar</label>
+                            <div id="contenedorPasos">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">1.</span>
+                                    <input type="text" class="form-control paso" placeholder="Describe el paso">
+                                    <button type="button" class="btn btn-outline-danger" onclick="eliminarInput(this)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregarPaso()">
+                                <i class="bi bi-plus-circle"></i> Agregar Paso
+                            </button>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success">Guardar Receta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p>&copy; 2026 Recetario - TFG | Desarrollado en Java con Spring Boot 🍳🎓</p>
+    </footer>
+
+    <!-- BOOTSTRAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let recetaEnEdicion = null;
+        const TOKEN = localStorage.getItem('token');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!TOKEN) {
+                document.getElementById('cargando').classList.add('d-none');
+                document.getElementById('mensajeNoAutorizado').classList.remove('d-none');
+            } else {
+                cargarMisRecetas();
+            }
+        });
+
+        // Cargar recetas del usuario
+        async function cargarMisRecetas() {
+            try {
+                const response = await fetch('/api/mis-recetas', {
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Error al cargar recetas');
+
+                const data = await response.json();
+                document.getElementById('cargando').classList.add('d-none');
+
+                if (data.recetas && data.recetas.length > 0) {
+                    mostrarRecetas(data.recetas);
+                } else {
+                    document.getElementById('sinRecetas').classList.remove('d-none');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('cargando').classList.add('d-none');
+                document.getElementById('mensajeError').classList.remove('d-none');
+            }
+        }
+
+        function mostrarRecetas(recetas) {
+            const contenedor = document.getElementById('contenedorRecetas');
+            contenedor.innerHTML = '';
+
+            recetas.forEach(receta => {
+                const tarjeta = `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card recipe-card shadow-sm h-100">
+                            <img src="${receta.imagen || 'https://via.placeholder.com/300x200?text=' + encodeURIComponent(receta.titulo)}" 
+                                 class="card-img-top" alt="${receta.titulo}">
+                            <div class="card-body">
+                                <h5 class="card-title">${receta.titulo}</h5>
+                                <p class="card-text">${receta.descripcion || ''}</p>
+                                <div class="receta-info mt-3">
+                                    ${receta.tiempoPreparacion ? `<p class="mb-2"><i class="bi bi-clock"></i> ${receta.tiempoPreparacion} min</p>` : ''}
+                                    ${receta.porciones ? `<p class="mb-2"><i class="bi bi-people"></i> ${receta.porciones} porciones</p>` : ''}
+                                    ${receta.dificultad ? `<p class="mb-2"><i class="bi bi-speedometer2"></i> ${receta.dificultad}</p>` : ''}
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white border-top d-flex gap-2">
+                                <button class="btn btn-primary btn-sm flex-grow-1" onclick="editarReceta('${receta.id}')">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </button>
+                                <button class="btn btn-danger btn-sm flex-grow-1" onclick="eliminarReceta('${receta.id}')">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                contenedor.innerHTML += tarjeta;
+            });
+
+            contenedor.classList.remove('d-none');
+        }
+
+        // Guardar receta
+        document.getElementById('formularioReceta').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const ingredientes = Array.from(document.querySelectorAll('.ingrediente'))
+                .map(el => el.value)
+                .filter(v => v.trim());
+
+            const pasos = Array.from(document.querySelectorAll('.paso'))
+                .map(el => el.value)
+                .filter(v => v.trim());
+
+            const recetaData = {
+                titulo: document.getElementById('campoTitulo').value,
+                descripcion: document.getElementById('campoDescripcion').value,
+                tiempoPreparacion: parseInt(document.getElementById('campoTiempo').value) || 0,
+                porciones: parseInt(document.getElementById('campoPorciones').value) || 0,
+                dificultad: document.getElementById('campoDificultad').value,
+                categoría: document.getElementById('campoCategoria').value,
+                imagen: document.getElementById('campoImagen').value,
+                ingredientes: ingredientes,
+                pasos: pasos
+            };
+
+            const url = recetaEnEdicion ? `/api/mis-recetas/${recetaEnEdicion}` : '/api/mis-recetas';
+            const metodo = recetaEnEdicion ? 'PUT' : 'POST';
+
+            try {
+                const response = await fetch(url, {
+                    method: metodo,
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(recetaData)
+                });
+
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalCrearReceta')).hide();
+                    limpiarFormulario();
+                    cargarMisRecetas();
+                } else {
+                    alert('Error al guardar la receta');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al guardar la receta');
+            }
+        });
+
+        function editarReceta(id) {
+            alert('Funcionalidad de edición en desarrollo');
+            // TODO: Implementar edición de recetas
+        }
+
+        async function eliminarReceta(id) {
+            if (confirm('¿Está seguro de que desea eliminar esta receta?')) {
+                try {
+                    const response = await fetch(`/api/mis-recetas/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${TOKEN}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        cargarMisRecetas();
+                    } else {
+                        alert('Error al eliminar la receta');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error al eliminar la receta');
+                }
+            }
+        }
+
+        function agregarIngrediente() {
+            const contenedor = document.getElementById('contenedorIngredientes');
+            const div = document.createElement('div');
+            div.className = 'input-group mb-2';
+            div.innerHTML = `
+                <input type="text" class="form-control ingrediente" placeholder="Ingrediente">
+                <button type="button" class="btn btn-outline-danger" onclick="eliminarInput(this)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+            contenedor.appendChild(div);
+        }
+
+        function agregarPaso() {
+            const contenedor = document.getElementById('contenedorPasos');
+            const numero = contenedor.children.length + 1;
+            const div = document.createElement('div');
+            div.className = 'input-group mb-2';
+            div.innerHTML = `
+                <span class="input-group-text">${numero}.</span>
+                <input type="text" class="form-control paso" placeholder="Describe el paso">
+                <button type="button" class="btn btn-outline-danger" onclick="eliminarInput(this)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            `;
+            contenedor.appendChild(div);
+        }
+
+        function eliminarInput(btn) {
+            btn.parentElement.remove();
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('formularioReceta').reset();
+            const contenedorIngredientes = document.getElementById('contenedorIngredientes');
+            contenedorIngredientes.innerHTML = `
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control ingrediente" placeholder="Ingrediente">
+                    <button type="button" class="btn btn-outline-danger" onclick="eliminarInput(this)">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            const contenedorPasos = document.getElementById('contenedorPasos');
+            contenedorPasos.innerHTML = `
+                <div class="input-group mb-2">
+                    <span class="input-group-text">1.</span>
+                    <input type="text" class="form-control paso" placeholder="Describe el paso">
+                    <button type="button" class="btn btn-outline-danger" onclick="eliminarInput(this)">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            recetaEnEdicion = null;
+            document.getElementById('tituloModal').textContent = 'Crear Nueva Receta';
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

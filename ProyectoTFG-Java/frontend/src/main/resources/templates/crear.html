@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✏️ Crear Receta - RecipeHub</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-fire"></i> Recetario
+            </a>
+            <div class="collapse navbar-collapse ms-auto">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/buscar">🔍 Buscar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/crear">✏️ Crear</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/favoritos">❤️ Favoritos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container my-5">
+        <h2 class="display-5 mb-4"><i class="bi bi-pencil-square"></i> Crear Tu Receta</h2>
+        
+        <div class="card shadow-lg">
+            <div class="card-body p-4">
+                <form id="formularioReceta">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Nombre de la Receta</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="nombreReceta"
+                                placeholder="Ej: Pasta a la Carbonara"
+                                required
+                            >
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">Tiempo (minutos)</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                id="tiempoReceta"
+                                placeholder="30"
+                            >
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label fw-bold">Porciones</label>
+                            <input 
+                                type="number" 
+                                class="form-control" 
+                                id="porcionesReceta"
+                                placeholder="4"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Ingredientes</label>
+                        <textarea 
+                            class="form-control" 
+                            id="ingredientesReceta"
+                            rows="3"
+                            placeholder="- 200g de pasta&#10;- 100g de panceta&#10;- 3 huevos"
+                            required
+                        ></textarea>
+                        <small class="text-muted">Separados por líneas (cada línea un ingrediente)</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Instrucciones</label>
+                        <textarea 
+                            class="form-control" 
+                            id="instruccionesReceta"
+                            rows="4"
+                            placeholder="1. Cocina la pasta en agua salada&#10;2. En una sartén, fríe la panceta..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg">
+                        💾 Guardar Receta
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Ejemplos de recetas creadas recientemente -->
+        <div class="mt-5">
+            <h3 class="mb-4">Tus Recetas Recientes</h3>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Quesadillas de Hongos</h5>
+                            <p class="card-text"><small class="text-muted">📅 Creada hace 2 días</small></p>
+                            <p class="card-text">Quesadillas rellenas de hongos salteados con queso Oaxaca.</p>
+                            <p class="text-muted"><small>⏱️ 25 min • 👥 2 porciones</small></p>
+                            <button class="btn btn-sm btn-warning">✏️ Editar</button>
+                            <button class="btn btn-sm btn-outline-danger">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Sopa de Minestrone</h5>
+                            <p class="card-text"><small class="text-muted">📅 Creada hace 1 semana</small></p>
+                            <p class="card-text">Sopa italiana con verduras, pasta y caldo casero.</p>
+                            <p class="text-muted"><small>⏱️ 45 min • 👥 4 porciones</small></p>
+                            <button class="btn btn-sm btn-warning">✏️ Editar</button>
+                            <button class="btn btn-sm btn-outline-danger">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Ceviche Peruano</h5>
+                            <p class="card-text"><small class="text-muted">📅 Creada hace 3 semanas</small></p>
+                            <p class="card-text">Ceviche fresco con pescado blanco, limón y cilantro.</p>
+                            <p class="text-muted"><small>⏱️ 20 min • 👥 4 porciones</small></p>
+                            <button class="btn btn-sm btn-warning">✏️ Editar</button>
+                            <button class="btn btn-sm btn-outline-danger">🗑️ Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p>&copy; 2026 RecipeHub - TFG</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

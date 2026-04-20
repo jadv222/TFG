@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Receta - Recetario</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-fire"></i> Recetario
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">🏠 Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/buscar">🔍 Buscar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/favoritos">❤️ Favoritos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container my-5">
+        <!-- Indicador de carga -->
+        <div id="cargando" class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3">Cargando receta...</p>
+        </div>
+
+        <!-- Contenedor de la receta (se rellena con JavaScript) -->
+        <div id="contenedorReceta" class="d-none">
+            <!-- Volver atrás -->
+            <div class="mb-4">
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Volver
+                </a>
+            </div>
+
+            <!-- Información principal -->
+            <div class="row mb-5">
+                <div class="col-md-6">
+                    <img id="imagenReceta" class="img-fluid rounded shadow" alt="Receta">
+                </div>
+                <div class="col-md-6">
+                    <h1 id="tituloReceta" class="display-4 fw-bold mb-3"></h1>
+                    
+                    <div class="info-receta mb-4">
+                        <div class="row">
+                            <div class="col-6 col-md-6 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <p class="mb-0"><i class="bi bi-clock"></i></p>
+                                        <h5 id="tiempoPreparacion">--</h5>
+                                        <small>Tiempo de preparación</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-6 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <p class="mb-0"><i class="bi bi-people"></i></p>
+                                        <h5 id="porciones">--</h5>
+                                        <small>Porciones</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="d-grid gap-2 d-md-flex">
+                        <button id="btnGuardarFavorito" class="btn btn-danger btn-lg" onclick="guardarFavorito()">
+                            <i class="bi bi-heart-fill"></i> Guardar en Favoritos
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ingredientes y Pasos -->
+            <div class="row">
+                <!-- Ingredientes -->
+                <div class="col-md-5">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="bi bi-bag-check"></i> Ingredientes</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul id="listaIngredientes" class="list-group list-group-flush">
+                                <!-- Se rellena con JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instrucciones -->
+                <div class="col-md-7">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="bi bi-list-check"></i> Pasos a Seguir</h5>
+                        </div>
+                        <div class="card-body">
+                            <ol id="listaInstrucciones" class="list-group list-group-numbered list-group-flush">
+                                <!-- Se rellena con JavaScript -->
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-info-circle"></i> Información Adicional</h5>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <p><strong>Tipo de dieta:</strong> <span id="tipoDieta">--</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p><strong>Vegetariano:</strong> <span id="vegetariano">--</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p><strong>Sin gluten:</strong> <span id="sinGluten">--</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p><strong>Vegano:</strong> <span id="vegano">--</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div id="mensajeError" class="alert alert-danger d-none" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> <strong>Error:</strong> No se pudo cargar la receta. Intenta más tarde.
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p>&copy; 2026 Recetario - TFG | Desarrollado en Java con Spring Boot 🍳🎓</p>
+    </footer>
+
+    <!-- BOOTSTRAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Obtener el ID de la receta de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const recetaId = window.location.pathname.split('/').pop();
+
+        // Cargar detalles de la receta
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarDetalleReceta(recetaId);
+        });
+
+        async function cargarDetalleReceta(id) {
+            try {
+                const response = await fetch(`/api/recipes/detalle/${id}`);
+                const receta = await response.json();
+
+                if (receta) {
+                    // Rellenar la información principal
+                    document.getElementById('imagenReceta').src = receta.image || 'https://via.placeholder.com/500x400?text=Receta';
+                    document.getElementById('tituloReceta').textContent = receta.title;
+                    document.getElementById('tiempoPreparacion').textContent = (receta.readyInMinutes || '--') + ' min';
+                    document.getElementById('porciones').textContent = receta.servings || '--';
+
+                    // Ingredientes
+                    const listaIngredientes = document.getElementById('listaIngredientes');
+                    if (receta.extendedIngredients && receta.extendedIngredients.length > 0) {
+                        receta.extendedIngredients.forEach(ingrediente => {
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item';
+                            li.innerHTML = `
+                                <strong>${ingrediente.name}</strong><br>
+                                <small class="text-muted">${ingrediente.original}</small>
+                            `;
+                            listaIngredientes.appendChild(li);
+                        });
+                    } else {
+                        listaIngredientes.innerHTML = '<li class="list-group-item text-muted">No hay ingredientes disponibles</li>';
+                    }
+
+                    // Instrucciones
+                    const listaInstrucciones = document.getElementById('listaInstrucciones');
+                    if (receta.analyzedInstructions && receta.analyzedInstructions.length > 0) {
+                        const steps = receta.analyzedInstructions[0].steps || [];
+                        if (steps.length > 0) {
+                            steps.forEach(step => {
+                                const li = document.createElement('li');
+                                li.className = 'list-group-item';
+                                li.textContent = step.step;
+                                listaInstrucciones.appendChild(li);
+                            });
+                        } else {
+                            listaInstrucciones.innerHTML = '<li class="list-group-item text-muted">No hay instrucciones disponibles</li>';
+                        }
+                    } else if (receta.instructions) {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = receta.instructions;
+                        listaInstrucciones.appendChild(li);
+                    } else {
+                        listaInstrucciones.innerHTML = '<li class="list-group-item text-muted">No hay instrucciones disponibles</li>';
+                    }
+
+                    // Información adicional
+                    document.getElementById('tipoDieta').textContent = receta.diets && receta.diets.length > 0 ? receta.diets.join(', ') : 'No especificado';
+                    document.getElementById('vegetariano').textContent = receta.vegetarian ? '✅ Sí' : '❌ No';
+                    document.getElementById('sinGluten').textContent = receta.glutenFree ? '✅ Sí' : '❌ No';
+                    document.getElementById('vegano').textContent = receta.vegan ? '✅ Sí' : '❌ No';
+
+                    // Mostrar contenedor
+                    document.getElementById('cargando').classList.add('d-none');
+                    document.getElementById('contenedorReceta').classList.remove('d-none');
+                } else {
+                    mostrarError();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarError();
+            }
+        }
+
+        function mostrarError() {
+            document.getElementById('cargando').classList.add('d-none');
+            document.getElementById('mensajeError').classList.remove('d-none');
+        }
+
+        function guardarFavorito() {
+            alert('Esta funcionalidad se habilitará cuando inicies sesión');
+            // Aquí irá la lógica de guardar favoritos con autenticación
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+/**
+ * css/styles.css
+ * Estilos personalizados para RecipeHub
+ * Diseño moderno y atractivo con colores cálidos
+ */
+
+:root {
+    --primary-color: #FF6B6B;
+    --secondary-color: #FFD93D;
+    --accent-color: #6BCB77;
+    --dark-color: #2D3436;
+    --light-color: #F5F6FA;
+}
+
+/* Typography */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--dark-color);
+}
+
+/* Navbar mejorada */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
+    color: var(--secondary-color) !important;
+    transition: transform 0.3s ease;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 100px 20px;
+    color: white;
+    margin-bottom: 50px;
+    animation: fadeInDown 0.8s ease;
+}
+
+.hero-section h1 {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
+}
+
+/* Botones */
+.btn-primary {
+    background-color: #667eea;
+    border: none;
+}
+
+.btn-success {
+    background-color: var(--accent-color);
+    border: none;
+}
+
+.btn-warning {
+    background-color: var(--secondary-color);
+    border: none;
+    color: var(--dark-color);
+}
+
+/* Formularios */
+.form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+}
+
+/* Modal */
+.modal-content {
+    border: none;
+    border-radius: 12px;
+}
+
+/* Tarjetas de Recetas */
+.recipe-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.recipe-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.recipe-card img {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.recipe-card:hover img {
+    transform: scale(1.05);
+}
+
+.recipe-card .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+.recipe-card .card-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--dark-color);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.recipe-card .card-text {
+    flex-grow: 1;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Botones Receta */
+.recipe-card .btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.recipe-card .btn-outline-danger:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Tabs */
+.nav-tabs .nav-link {
+    color: #666;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.nav-tabs .nav-link.active {
+    background-color: transparent;
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* Animaciones */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .recipe-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Link Hover Effects */
+a {
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-color);
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #e55556;
+}
+/* Cursor pointer para elementos interactivos */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Información de Receta */
+.receta-info {
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.receta-info p {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.receta-info i {
+    color: var(--primary-color);
+    margin-right: 0.5rem;
+}
+
+/* Página de Detalle de Receta */
+.detalle-receta-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.info-receta {
+    margin: 2rem 0;
+}
+
+.info-receta .card {
+    background-color: white;
+    border: 1px solid #eee;
+}
+
+.info-receta .card-body {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.info-receta .card-body h5 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin: 0.5rem 0;
+}
+
+.info-receta .card-body small {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+/* Listas en detalle */
+.list-group-item {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.list-group-item strong {
+    color: var(--dark-color);
+}
+
+.list-group-item small {
+    color: #999;
+}
+
+/* Card Header */
+.card-header {
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+
+.card-header h5 {
+    margin: 0;
+    color: white;
+    font-size: 1.2rem;
+}
+
+/* Búsqueda rápida */
+.input-group .form-control {
+    border-right: none;
+    padding: 0.75rem 1rem;
+}
+
+.input-group .btn {
+    border-left: none;
+    padding: 0.75rem 1.5rem;
+}
+
+/* Mensajes de estado */
+.alert {
+    border-radius: 8px;
+    border: none;
+    padding: 1.5rem;
+}
+
+.alert-info {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.alert-danger {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* Spinner personalizado */
+.spinner-border {
+    color: var(--primary-color);
+}
+
+/* Footer mejorado */
+footer {
+    border-top: 2px solid rgba(255,255,255,0.1);
+    margin-top: 3rem;
+}

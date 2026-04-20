@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍳 Recetario - Tus Recetas Favoritas</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-fire"></i> Recetario
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/buscar">🔍 Buscar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mis-recetas">📝 Mis Recetas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/favoritos">❤️ Favoritos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalAuth">
+                            👤 Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="container text-center text-white">
+            <h1 class="display-3 fw-bold mb-3">🍳 Bienvenido a El Recetario</h1>
+            <p class="lead mb-4">Descubre, crea y guarda tus recetas favoritas en un solo lugar</p>
+        </div>
+    </section>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container my-5">
+        <h2 class="display-5 mb-4"><i class="bi bi-search"></i> Buscar Recetas</h2>
+        
+        <section class="mb-5">
+            <div class="card shadow-lg">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-9 mb-3 mb-md-0">
+                            <input 
+                                type="text" 
+                                class="form-control form-control-lg" 
+                                id="busquedaRapida"
+                                placeholder="Busca por ingrediente: pasta, pollo, chocolate..."
+                            >
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-primary btn-lg w-100" id="btnBuscarRapido">
+                                🔍 Buscar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recetas cargadas dinámicamente -->
+            <div class="mt-5">
+                <h3 class="mb-4" id="tituloRecetas">Recetas Populares</h3>
+                
+                <!-- Indicador de carga -->
+                <div id="cargando" class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="mt-3">Cargando recetas...</p>
+                </div>
+
+                <!-- Contenedor de recetas -->
+                <div id="contenedorRecetas" class="row g-4 d-none">
+                    <!-- Las recetas se cargarán aquí con JavaScript -->
+                </div>
+
+                <!-- Mensaje cuando no hay resultados -->
+                <div id="sinResultados" class="alert alert-info d-none text-center" role="alert">
+                    <i class="bi bi-info-circle"></i> No se encontraron recetas. Prueba con otro término de búsqueda.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL DE AUTENTICACIÓN -->
+    <div class="modal fade" id="modalAuth" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Bienvenido a Recetario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-3" id="tabsAuth">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#registro">Registro</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <!-- TAB LOGIN -->
+                        <div id="login" class="tab-pane fade show active">
+                            <form id="formularioLogin">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="loginEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                                <div id="mensajeLoginError" class="alert alert-danger d-none mt-3"></div>
+                            </form>
+                        </div>
+
+                        <!-- TAB REGISTRO -->
+                        <div id="registro" class="tab-pane fade">
+                            <form id="formularioRegistro">
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="registroNombre" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="registroEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="registroPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">Registrarse</button>
+                                <div id="mensajeRegistroError" class="alert alert-danger d-none mt-3"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p>&copy; 2026 Recetario - TFG | Desarrollado en Java con Spring Boot 🍳🎓</p>
+    </footer>
+
+    <!-- BOOTSTRAP (Solo para componentes CSS como modales) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para cargar recetas -->
+    <script>
+        // Cargar recetas iniciales al abrir la página
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarRecetasPorPalabra('pasta');
+        });
+
+        // Evento de búsqueda rápida
+        document.getElementById('btnBuscarRapido').addEventListener('click', function() {
+            const termino = document.getElementById('busquedaRapida').value.trim();
+            if (termino) {
+                cargarRecetasPorPalabra(termino);
+            } else {
+                alert('Por favor, ingresa un término de búsqueda');
+            }
+        });
+
+        // Buscar al presionar Enter en el campo
+        document.getElementById('busquedaRapida').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('btnBuscarRapido').click();
+            }
+        });
+
+        // Función para cargar recetas desde la API
+        async function cargarRecetasPorPalabra(palabra) {
+            const cargando = document.getElementById('cargando');
+            const contenedor = document.getElementById('contenedorRecetas');
+            const sinResultados = document.getElementById('sinResultados');
+            const tituloRecetas = document.getElementById('tituloRecetas');
+
+            cargando.classList.remove('d-none');
+            contenedor.classList.add('d-none');
+            contenedor.innerHTML = '';
+            sinResultados.classList.add('d-none');
+            tituloRecetas.textContent = 'Recetas de ' + palabra;
+
+            try {
+                const response = await fetch(`/api/recipes/buscar?query=${encodeURIComponent(palabra)}`);
+                const data = await response.json();
+
+                cargando.classList.add('d-none');
+
+                if (data.results && data.results.length > 0) {
+                    // Mostrar solo las primeras 12 recetas
+                    data.results.slice(0, 12).forEach(receta => {
+                        const tarjeta = crearTarjetaReceta(receta);
+                        contenedor.innerHTML += tarjeta;
+                    });
+                    contenedor.classList.remove('d-none');
+                } else {
+                    sinResultados.classList.remove('d-none');
+                    sinResultados.textContent = 'No se encontraron recetas para "' + palabra + '". Prueba con otro término.';
+                }
+            } catch (error) {
+                console.error('Error al buscar recetas:', error);
+                cargando.classList.add('d-none');
+                sinResultados.classList.remove('d-none');
+                sinResultados.innerHTML = '<i class="bi bi-exclamation-triangle"></i> <strong>Error:</strong> No se pudo cargar las recetas. Intenta más tarde.';
+            }
+        }
+
+        // Función para crear la HTML de una tarjeta de receta
+        function crearTarjetaReceta(receta) {
+            const imagen = receta.image || 'https://via.placeholder.com/400x300?text=Receta';
+            const titulo = receta.title || 'Receta sin título';
+            const id = receta.id;
+            
+            return `
+                <div class="col-md-6 col-lg-4">
+                    <div class="card recipe-card shadow-sm h-100 cursor-pointer" onclick="verDetalleReceta(${id})">
+                        <img src="${imagen}" class="card-img-top" alt="${titulo}">
+                        <div class="card-body">
+                            <h5 class="card-title">${titulo}</h5>
+                            <div class="receta-info mt-3">
+                                ${receta.readyInMinutes ? `<p class="mb-2"><i class="bi bi-clock"></i> ${receta.readyInMinutes} min</p>` : ''}
+                                ${receta.servings ? `<p class="mb-2"><i class="bi bi-people"></i> ${receta.servings} porciones</p>` : ''}
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white border-top">
+                            <button class="btn btn-primary btn-sm w-100" onclick="event.stopPropagation()">
+                                <i class="bi bi-heart"></i> Guardar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Función para ver detalles de una receta
+        function verDetalleReceta(id) {
+            window.location.href = `/receta/${id}`;
+        }
+
+        // ====== AUTENTICACIÓN ======
+        
+        // Login
+        document.getElementById('formularioLogin').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const mensajeError = document.getElementById('mensajeLoginError');
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userId', data.usuario.id);
+                    localStorage.setItem('userName', data.usuario.nombre);
+                    
+                    // Cerrar modal
+                    bootstrap.Modal.getInstance(document.getElementById('modalAuth')).hide();
+                    
+                    // Mostrar mensaje de éxito
+                    alert('¡Bienvenido ' + data.usuario.nombre + '!');
+                    
+                    // Redirigir o actualizar UI
+                    window.location.href = '/mis-recetas';
+                } else {
+                    mensajeError.textContent = data.substring(0, 100) || 'Error al iniciar sesión';
+                    mensajeError.classList.remove('d-none');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mensajeError.textContent = 'Error de conexión. Intenta más tarde.';
+                mensajeError.classList.remove('d-none');
+            }
+        });
+
+        // Registro
+        document.getElementById('formularioRegistro').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('registroNombre').value;
+            const email = document.getElementById('registroEmail').value;
+            const password = document.getElementById('registroPassword').value;
+            const mensajeError = document.getElementById('mensajeRegistroError');
+
+            try {
+                const response = await fetch('/api/auth/registro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombre, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userId', data.usuario.id);
+                    localStorage.setItem('userName', data.usuario.nombre);
+                    
+                    // Cerrar modal
+                    bootstrap.Modal.getInstance(document.getElementById('modalAuth')).hide();
+                    
+                    // Mostrar mensaje de éxito
+                    alert('¡Registro exitoso! Bienvenido ' + data.usuario.nombre);
+                    
+                    // Redirigir a mis recetas
+                    window.location.href = '/mis-recetas';
+                } else {
+                    mensajeError.textContent = data.substring(0, 100) || 'Error al registrarse';
+                    mensajeError.classList.remove('d-none');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mensajeError.textContent = 'Error de conexión. Intenta más tarde.';
+                mensajeError.classList.remove('d-none');
+            }
+        });
+    </script>
+</body>
+</html>

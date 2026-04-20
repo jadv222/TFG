@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❤️ Mis Favoritos - Recetario</title></title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-fire"></i> Recetario
+            </a>
+            <div class="collapse navbar-collapse ms-auto">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/buscar">🔍 Buscar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/crear">✏️ Crear</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/favoritos">❤️ Favoritos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container my-5">
+        <h2 class="display-5 mb-4"><i class="bi bi-heart-fill"></i> Mis Favoritos</h2>
+        
+        <div class="row g-4">
+            <!-- Favorito 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card recipe-card shadow">
+                    <img src="https://via.placeholder.com/300x200?text=Ensalada+Cesar" class="card-img-top" alt="Ensalada Cesar">
+                    <div class="card-body">
+                        <h5 class="card-title">Ensalada César</h5>
+                        <p class="card-text"><small class="text-muted">⏱️ 15 min • 👥 2 porciones</small></p>
+                        <p class="card-text">Ensalada clásica con aderezo homogéneo y crutones crujientes.</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-danger flex-grow-1">❌ Eliminar</button>
+                            <button class="btn btn-sm btn-info">👁️ Ver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Favorito 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card recipe-card shadow">
+                    <img src="https://via.placeholder.com/300x200?text=Pizza+Margarita" class="card-img-top" alt="Pizza">
+                    <div class="card-body">
+                        <h5 class="card-title">Pizza Margarita</h5>
+                        <p class="card-text"><small class="text-muted">⏱️ 45 min • 👥 4 porciones</small></p>
+                        <p class="card-text">Pizza casera con masa crujiente, tomate y mozzarella fresca.</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-danger flex-grow-1">❌ Eliminar</button>
+                            <button class="btn btn-sm btn-info">👁️ Ver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Favorito 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card recipe-card shadow">
+                    <img src="https://via.placeholder.com/300x200?text=Sushi+Rolls" class="card-img-top" alt="Sushi">
+                    <div class="card-body">
+                        <h5 class="card-title">Sushi Rolls</h5>
+                        <p class="card-text"><small class="text-muted">⏱️ 35 min • 👥 2 porciones</small></p>
+                        <p class="card-text">Rolls de sushi con salmón, aguacate y jengibre encurtido.</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-danger flex-grow-1">❌ Eliminar</button>
+                            <button class="btn btn-sm btn-info">👁️ Ver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p>&copy; 2026 RecipeHub - TFG</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

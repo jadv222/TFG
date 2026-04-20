@@ -1,0 +1,3 @@
+{"_id": "507f1f77bcf86cd799439001", "nombre": "Administrador Recetario", "email": "admin@recetario.com", "password": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36DxYLEi", "rol": "ADMIN", "fechaRegistro": 1712662800000}
+{"_id": "507f1f77bcf86cd799439002", "nombre": "Juan García", "email": "juan@recetario.com", "password": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36DxYLEi", "rol": "USER", "fechaRegistro": 1712662800000}
+{"_id": "507f1f77bcf86cd799439003", "nombre": "María López", "email": "maria@recetario.com", "password": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36DxYLEi", "rol": "USER", "fechaRegistro": 1712662800000}
